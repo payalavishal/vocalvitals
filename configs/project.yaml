@@ -1,0 +1,43 @@
+project:
+  name: VocalVitals
+  stage: reconstruction
+  research_only: true
+
+real_data:
+  sample_rate_hz: 16000
+  window_ms: 200
+  window_samples: 3200
+  channels: 4
+  channel_layout:
+    - contact_microphone
+    - accelerometer_x
+    - accelerometer_y
+    - accelerometer_z
+  labels:
+    non_swallow: 0
+    swallow: 1
+
+  # Historical extraction setting from the previous project report.
+  # We will validate event-boundary coverage before freezing this value.
+  event_padding_ms: 50
+
+training:
+  random_seed: 42
+  validation_metric: f1
+  threshold: 0.5
+  split_strategy: participant_wise
+  holdout_test_required: true
+
+synthetic_demo:
+  enabled: true
+  labels:
+    - Normal
+    - Delayed
+    - Aspirating
+  warning: "Synthetic demonstration labels only; not clinical labels."
+
+safety:
+  clinical_validation: false
+  diagnosis_supported: false
+  aspiration_detection_supported: false
+  caregiver_alerts_supported: false

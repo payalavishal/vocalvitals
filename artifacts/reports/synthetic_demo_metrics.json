@@ -1,0 +1,30 @@
+{
+  "synthetic_only": true,
+  "samples_per_class": 120,
+  "validation_samples": 72,
+  "class_names": [
+    "Normal",
+    "Delayed",
+    "Aspirating"
+  ],
+  "best_epoch": 4,
+  "validation_accuracy": 1.0,
+  "confusion_matrix": [
+    [
+      24,
+      0,
+      0
+    ],
+    [
+      0,
+      24,
+      0
+    ],
+    [
+      0,
+      0,
+      24
+    ]
+  ],
+  "interpretation": "Artificially generated waveforms only. These labels do not represent patient observations or clinical aspiration detection."
+}

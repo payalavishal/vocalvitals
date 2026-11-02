@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.Python
+.venv/
+venv/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Data and model artifacts (keep private/large files out of Git)
+data/raw/**
+data/interim/**
+data/processed/**
+artifacts/checkpoints/**
+artifacts/reports/**
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!artifacts/checkpoints/.gitkeep
+!artifacts/reports/.gitkeep
+
+# Local IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

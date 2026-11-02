@@ -1,0 +1,115 @@
+{
+  "note": "Corrected guard100_balanced dataset, participant-wise train/validation, real data only, test untouched.",
+  "models": {
+    "extra_trees": {
+      "auc": 0.6539192809610233,
+      "best": {
+        "threshold": 0.5500000000000002,
+        "balanced_accuracy": 0.6301529686284677,
+        "accuracy": 0.6318785578747628,
+        "f1": 0.5467289719626168,
+        "specificity": 0.8120300751879699,
+        "recall": 0.4482758620689655,
+        "confusion_matrix": [
+          [
+            216,
+            50
+          ],
+          [
+            144,
+            117
+          ]
+        ]
+      },
+      "seconds": 2.8
+    },
+    "random_forest": {
+      "auc": 0.6572033532106127,
+      "best": {
+        "threshold": 0.5500000000000002,
+        "balanced_accuracy": 0.6358640855011091,
+        "accuracy": 0.6375711574952562,
+        "f1": 0.5547785547785548,
+        "specificity": 0.8157894736842105,
+        "recall": 0.4559386973180077,
+        "confusion_matrix": [
+          [
+            217,
+            49
+          ],
+          [
+            142,
+            119
+          ]
+        ]
+      },
+      "seconds": 3.1
+    },
+    "hist_gradient": {
+      "auc": 0.6359289027165616,
+      "best": {
+        "threshold": 0.6500000000000001,
+        "balanced_accuracy": 0.6064082620343964,
+        "accuracy": 0.6091081593927894,
+        "f1": 0.44919786096256686,
+        "specificity": 0.8909774436090225,
+        "recall": 0.3218390804597701,
+        "confusion_matrix": [
+          [
+            237,
+            29
+          ],
+          [
+            177,
+            84
+          ]
+        ]
+      },
+      "seconds": 1.4
+    },
+    "svm_rbf": {
+      "auc": 0.6677037421139055,
+      "best": {
+        "threshold": 0.5500000000000002,
+        "balanced_accuracy": 0.640127617895313,
+        "accuracy": 0.6413662239089184,
+        "f1": 0.5846153846153846,
+        "specificity": 0.7706766917293233,
+        "recall": 0.5095785440613027,
+        "confusion_matrix": [
+          [
+            205,
+            61
+          ],
+          [
+            128,
+            133
+          ]
+        ]
+      },
+      "seconds": 5.0
+    },
+    "logistic": {
+      "auc": 0.6405237231008556,
+      "best": {
+        "threshold": 0.5500000000000002,
+        "balanced_accuracy": 0.6118961196093683,
+        "accuracy": 0.6129032258064516,
+        "f1": 0.5641025641025641,
+        "specificity": 0.7180451127819549,
+        "recall": 0.5057471264367817,
+        "confusion_matrix": [
+          [
+            191,
+            75
+          ],
+          [
+            129,
+            132
+          ]
+        ]
+      },
+      "seconds": 0.2
+    }
+  }
+}
