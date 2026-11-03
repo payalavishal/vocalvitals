@@ -1,0 +1,84 @@
+{
+  "evaluation": "one-time held-out test evaluation",
+  "threshold": 0.5,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+  "checkpoint_epoch": 1,
+  "checkpoint_validation_metrics": {
+    "accuracy": 0.576837416481069,
+    "precision": 0.5926829268292683,
+    "recall": 0.9135338345864662,
+    "specificity": 0.08743169398907104,
+    "f1": 0.7189349112426036,
+    "auc": 0.526274703151321,
+    "confusion_matrix": [
+      [
+        16,
+        167
+      ],
+      [
+        23,
+        243
+      ]
+    ]
+  },
+  "dataset_sha256": "e4232b15f675661cb7cedf2cc3a141cf968200d77dac61acd442fcaf4ccae3af",
+  "checkpoint_sha256": "6eabd8c6eadf6f6013609e8aef67abbb2f06832d0cc0cb9017e3f24e48822d3d",
+  "test_window_count": 457,
+  "test_participant_count": 26,
+  "test_participants": [
+    "NS012",
+    "NS033",
+    "NS042",
+    "NS045",
+    "NS046",
+    "NS067",
+    "NS071",
+    "NS090",
+    "NS102",
+    "NS112",
+    "NS120",
+    "NS122",
+    "NS134",
+    "NS148",
+    "NS150",
+    "NS152",
+    "NS156",
+    "NS163",
+    "NS174",
+    "NS177",
+    "NS202",
+    "NS204",
+    "S005",
+    "S033",
+    "S038",
+    "S046"
+  ],
+  "class_counts": {
+    "non_swallow": 185,
+    "swallow": 272
+  },
+  "metrics": {
+    "accuracy": 0.5711159737417943,
+    "precision": 0.590047393364929,
+    "recall": 0.9154411764705882,
+    "specificity": 0.06486486486486487,
+    "f1": 0.7175792507204611,
+    "auc": 0.565043720190779,
+    "confusion_matrix_labels": [
+      "non_swallow",
+      "swallow"
+    ],
+    "confusion_matrix": [
+      [
+        12,
+        173
+      ],
+      [
+        23,
+        249
+      ]
+    ]
+  },
+  "interpretation": "Experimental swallow-event detection only; these metrics do not measure aspiration detection or clinical performance."
+}
