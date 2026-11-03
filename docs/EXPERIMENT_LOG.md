@@ -152,3 +152,78 @@ The current checkpoint is an experimental baseline only. The project remains a s
 - Out-of-fold accuracy / balanced accuracy at 0.5: spectrogram CNN 63.78% / 63.80%; time-domain CNN 58.04% / 58.05%; RBF SVM 59.01% / 58.99%; three-model blend 63.69% / 63.70%.
 
 The cross-validation result is more realistic than selecting one favorable validation split, but still only internal development evidence. No model is approved for medical use. The independent test result remains 59.67% accuracy / 0.6506 AUC and must not be reused for tuning.
+
+## EXP-006 - Signal-only ceiling (no window-position features)
+
+**Date:** 2026-11-03  
+**Status:** Completed; defines the honest signal-only ceiling.  
+**Script:** `scripts/experiment_signal_only_baseline.py`  
+**Report:** `artifacts/reports/signal_only_baseline_experiment.json`
+
+### Question
+
+The earlier ceiling note claimed signal-only models top out around 0.65-0.75 AUC, but that number came from several small one-off scripts. This experiment rebuilds a single, richer signal-only feature set to test whether that ceiling actually holds, or whether it was an artefact of weak features.
+
+### Method
+
+- Only the 200 ms four-channel window is used. `start_ms`, recording length, per-recording aggregates and every other metadata field are excluded by construction; the builder takes a window array and nothing else.
+- Channel scaling uses the 99.5th percentile of absolute amplitude computed on training participants only.
+- Features (3,405 total): 40 log-spaced mel bands per channel at 256-point STFT with 64-sample hop, pooled into 10 segments plus deltas, per-band mean and standard deviation over time, and 11 handcrafted per-channel descriptors (log RMS, crest factor, spectral flatness, centroid, bandwidth, 50%/85% roll-off, zero-crossing rate, envelope coefficient of variation, envelope peak-to-mean, spectral flux) plus a microphone-to-accelerometer energy ratio.
+- Four models: Extra Trees, Random Forest, RBF SVM, logistic regression. Four pre-specified blend weightings were compared on validation AUC only.
+
+### Result
+
+| Model | Validation AUC |
+|---|---:|
+| Extra Trees | 0.7242 |
+| Random Forest | 0.7219 |
+| RBF SVM | 0.6696 |
+| Logistic regression | 0.6567 |
+| Best blend (`tree_heavy`) | 0.7273 |
+
+Blend at threshold 0.495:
+
+| Split | Accuracy | Balanced accuracy | F1 | AUC |
+|---|---:|---:|---:|---:|
+| Validation (model selection) | 67.74% | 67.73% | 67.18% | 0.7273 |
+| Test (spent, descriptive only) | 61.88% | 62.19% | 57.84% | 0.6643 |
+
+### Interpretation
+
+The signal-only ceiling is real. Careful feature engineering moved validation AUC from roughly 0.65 to 0.727, but every model family converges near the same place and the test split lands near 0.66. There is no feature set, architecture or blend inside this dataset that reaches 98-99%. The gap from 0.73 to 0.99 is a data problem, not a modelling problem: 200 ms four-channel windows centred on annotated swallow events do not separate reliably from guarded background windows across unseen participants.
+
+The test numbers are printed for completeness only. That split was spent in EXP-004 and no selection step in this experiment reads it.
+
+## EXP-007 - Position-augmented research ensemble (NOT a detector)
+
+**Date:** 2026-11-03  
+**Status:** Research artefact; must not be presented as detection accuracy.  
+**Script:** `scripts/experiment_position_augmented.py`  
+**Report:** `artifacts/reports/position_augmented_experiment.json`  
+**Checkpoint:** `artifacts/checkpoints/position_augmented_ensemble.joblib`
+
+### What it does
+
+Adds 16 window-position features derived from recording metadata (`start_ms`, recording length, position ratio, per-recording start-time mean/std/min/max/count, and their normalized variants) to the same four-channel windows, then stacks Random Forest, Extra Trees, Histogram Gradient Boosting and logistic regression behind a logistic meta-learner. The decision threshold is selected on validation only.
+
+### Result
+
+| Split | Accuracy | Balanced accuracy | Precision | Recall | Specificity | F1 | AUC |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Validation | 95.45% | 95.43% | 96.47% | 94.25% | 96.62% | 95.35% | 0.9891 |
+| Test (spent) | 92.45% | 92.51% | 94.74% | 90.32% | 94.70% | 92.48% | 0.9846 |
+
+### Why this is not the accuracy the project needs
+
+The gain comes almost entirely from `start_ms`. Swallow events cluster early in these short clips while non-swallow windows are sampled uniformly across each recording, so window position leaks the label. A deployed detector receives one window at a time and cannot use this cue, and any recording where events are not front-loaded would break it.
+
+Evidence for the artefact:
+
+- Signal-only models on the same windows reach 0.73 validation AUC (EXP-006); adding position alone lifts it to 0.99.
+- Roughly 92-95% is reachable from position features even with a deliberately leaky random window split, which is the signature of a label leak rather than a physiological discriminant.
+
+Consequences:
+
+- The checkpoint is written with `research_only: true` and `clinical_validity: false`. It is not connected to the API, dashboard or inference helper.
+- These numbers must never be quoted as swallow-detection or aspiration-detection accuracy.
+- Closing the gap to 98-99% honestly requires new data: more participants, denser annotation inside recordings, and an independent aspiration outcome label that this dataset does not contain.

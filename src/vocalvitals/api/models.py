@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
-from enum import StrEnum
+from datetime import datetime, timezone
+from enum import Enum
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
-class SyntheticLabel(StrEnum):
+class SyntheticLabel(str, Enum):
     NORMAL = "Normal"
     DELAYED = "Delayed"
     ASPIRATING = "Aspirating"
@@ -21,7 +21,7 @@ class EventIn(BaseModel):
     label: SyntheticLabel
     confidence: float = Field(ge=0.0, le=1.0)
     source: str = Field(default="synthetic_demo", max_length=64)
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     @field_validator("patient_id")
     @classmethod

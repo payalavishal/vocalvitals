@@ -84,6 +84,8 @@ The lockfile pins the CUDA-enabled PyTorch 2.11.0+cu128 build used on the RTX 30
 - Run tests: python -m pytest -q
 - Run static checks: python -m ruff check .
 - Train binary model: python scripts\train_binary.py
+- Signal-only ceiling experiment (research): python scripts\experiment_signal_only_baseline.py
+- Position-augmented research ensemble (not a detector): python scripts\experiment_position_augmented.py
 - Evaluate held-out test once, only after protocol freeze: python scripts\evaluate_binary.py --confirm-final
 - Train synthetic demo: python scripts\train_synthetic_demo.py
 - Start demo API: python -m uvicorn vocalvitals.api.app:app --reload
@@ -104,7 +106,7 @@ The lockfile pins the CUDA-enabled PyTorch 2.11.0+cu128 build used on the RTX 30
 - **M0 - Workspace scaffold:** complete.
 - **M1 - Dataset recovery and inventory:** complete; checksums and source details are recorded in docs/DATA_PROVENANCE.md.
 - **M2 - Reproducible binary preprocessing and participant splits:** implemented and unit-tested; historical count discrepancy remains under investigation.
-- **M3 - Binary model reconstruction:** exploratory model comparison completed. The corrected balanced ensemble reached 71.16% validation accuracy / 0.7507 AUC, but only 59.67% accuracy / 0.6506 AUC on its one-time held-out test. Five-fold participant-group out-of-fold AUC was 0.6892 for the spectrogram CNN. Generalisation remains weak; the model is not clinically useful or validated. See docs/EXPERIMENT_LOG.md.
+- **M3 - Binary model reconstruction:** exploratory model comparison completed. The corrected balanced ensemble reached 71.16% validation accuracy / 0.7507 AUC, but only 59.67% accuracy / 0.6506 AUC on its one-time held-out test. Five-fold participant-group out-of-fold AUC was 0.6892 for the spectrogram CNN. A signal-only ceiling study (EXP-006, `scripts/experiment_signal_only_baseline.py`) with a much richer feature set reached 67.74% validation accuracy / 0.7273 AUC, confirming that waveform information alone caps out near 0.73 AUC on this dataset. A position-augmented research ensemble reaches 92.45% test accuracy but only by exploiting a window-sampling artefact; it is research-only and must not be reported as detector accuracy. Generalisation remains weak; the model is not clinically useful or validated. See docs/ACCURACY_CEILING_NOTE.md and docs/EXPERIMENT_LOG.md.
 - **M4 - Synthetic demo reconstruction:** implemented and trained on generated waveforms only; validation accuracy is not clinical evidence.
 - **M5 - API/dashboard/MQTT demo:** implemented and locally smoke-tested for HTTP. MQTT broker and real piezo/Raspberry Pi hardware are not validated.
 
